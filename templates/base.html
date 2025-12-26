@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Prodi Informatika Kreatif - UMS{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1e88e5;
+            --secondary-color: #43a047;
+            --ums-green: #006400;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 56px;
+        }
+        
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--ums-green), #2e7d32);
+            color: white;
+            padding: 100px 0;
+        }
+        
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .section-title {
+            color: var(--ums-green);
+            border-bottom: 3px solid var(--ums-green);
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+            display: inline-block;
+        }
+        
+        .card {
+            transition: transform 0.3s;
+            border: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .footer {
+            background-color: #f5f5f5;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 3px solid var(--ums-green);
+        }
+        
+        .news-image {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .btn-primary {
+            background-color: var(--ums-green);
+            border-color: var(--ums-green);
+            padding: 10px 30px;
+            font-weight: bold;
+        }
+        
+        .btn-primary:hover {
+            background-color: #1b5e20;
+            border-color: #1b5e20;
+            transform: scale(1.05);
+        }
+        
+        .btn-outline-primary {
+            color: var(--ums-green);
+            border-color: var(--ums-green);
+        }
+        
+        .btn-outline-primary:hover {
+            background-color: var(--ums-green);
+            border-color: var(--ums-green);
+        }
+        
+        .text-primary {
+            color: var(--ums-green) !important;
+        }
+        
+        .bg-primary {
+            background-color: var(--ums-green) !important;
+        }
+        
+        .badge.bg-primary {
+            background-color: var(--ums-green) !important;
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top shadow-sm">
+        <div class="container">
+            <div class="d-flex align-items-center">
+                <div class="me-3">
+                    <i class="fas fa-university fa-2x" style="color: var(--ums-green);"></i>
+                </div>
+                <div>
+                    <a class="navbar-brand" href="{% url 'index' %}">
+                        <span style="color: var(--ums-green);">INFORMATIKA</span> KREATIF
+                    </a>
+                    <div class="text-muted" style="font-size: 0.8rem;">
+                        Fakultas Ilmu Komputer - Universitas Muhammadiyah Surakarta
+                    </div>
+                </div>
+            </div>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'index' %}">
+                            <i class="fas fa-home me-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'about' %}">
+                            <i class="fas fa-info-circle me-1"></i> Profil
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'news' %}">
+                            <i class="fas fa-newspaper me-1"></i> Berita
+                        </a>
+                    </li>
+                    {% if user.is_authenticated and user.is_staff %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'news_create' %}">
+                            <i class="fas fa-plus me-1"></i> Tambah Berita
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/">
+                            <i class="fas fa-cog me-1"></i> Admin
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <span class="nav-link text-success">
+                            <i class="fas fa-user me-1"></i> {{ user.username }}
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/logout/">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/admin/login/">
+                            <i class="fas fa-sign-in-alt me-1"></i> Login
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-primary">
+                        <i class="fas fa-laptop-code me-2"></i>PRODI INFORMATIKA KREATIF
+                    </h5>
+                    <p class="mt-3">Fakultas Ilmu Komputer<br>
+                    Universitas Muhammadiyah Surakarta</p>
+                    <p class="mt-3">"Menyiapkan Profesional Digital yang Kreatif, Inovatif, dan Islami"</p>
+                    <p>
+                        <i class="fas fa-globe me-2"></i>
+                        <a href="https://fik.ums.ac.id" class="text-decoration-none">
+                            fik.ums.ac.id
+                        </a>
+                    </p>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-primary">Menu</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2">
+                            <a href="{% url 'index' %}" class="text-decoration-none">
+                                <i class="fas fa-chevron-right me-2"></i> Home
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'about' %}" class="text-decoration-none">
+                                <i class="fas fa-chevron-right me-2"></i> Profil Prodi
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="{% url 'news' %}" class="text-decoration-none">
+                                <i class="fas fa-chevron-right me-2"></i> Berita & Informasi
+                            </a>
+                        </li>
+                        <li class="mb-2">
+                            <a href="https://akademik.ums.ac.id" class="text-decoration-none">
+                                <i class="fas fa-chevron-right me-2"></i> Akademik UMS
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="text-primary">Kontak</h5>
+                    <p><i class="fas fa-map-marker-alt me-2"></i> 
+                       Gedung FIK, Kampus 1 UMS<br>
+                       Jl. Ahmad Yani, Pabelan, Kartasura<br>
+                       Sukoharjo 57162</p>
+                    <p><i class="fas fa-phone me-2"></i> (0271) 717417 ext. 1234</p>
+                    <p><i class="fas fa-envelope me-2"></i> informatika@ums.ac.id</p>
+                    <p><i class="fas fa-clock me-2"></i> Senin - Jumat: 08.00 - 16.00</p>
+                </div>
+            </div>
+            <hr>
+            <div class="text-center">
+                <p>&copy; {% now "Y" %} Program Studi Informatika Kreatif - Universitas Muhammadiyah Surakarta.</p>
+                <p class="text-muted">
+                    <i class="fas fa-star-and-crescent me-1"></i>
+                    "Unggul dan Islami dalam Pengembangan Ilmu Pengetahuan, Teknologi, dan Seni"
+                </p>
+                <p class="small">
+                    Akreditasi: <strong>BAN-PT Unggul</strong> | 
+                    SK Pendirian: <strong>1234/Dikti/2023</strong> |
+                    <a href="https://ums.ac.id" class="text-decoration-none">Website Resmi UMS</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

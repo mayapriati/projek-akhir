@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ news.title }} - SMK Negeri 1 Wonosegoro{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <!-- Breadcrumb -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'news' %}">Berita</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ news.title|truncatechars:30 }}</li>
+                </ol>
+            </nav>
+
+            <!-- News Article -->
+            <article class="card shadow-sm">
+                <!-- News Header -->
+                <div class="card-header bg-primary text-white">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h1 class="h4 mb-0">{{ news.title }}</h1>
+                        {% if user.is_authenticated and user.is_staff %}
+                        <div class="btn-group">
+                            <a href="{% url 'news_update' news.id %}" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit me-1"></i> Edit
+                            </a>
+                            <a href="{% url 'news_delete' news.id %}" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash me-1"></i> Delete
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- News Meta -->
+                <div class="card-body border-bottom">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <p class="mb-1">
+                                <i class="fas fa-user text-primary me-2"></i>
+                                <strong>Penulis:</strong> {{ news.author.username }}
+                            </p>
+                            <p class="mb-1">
+                                <i class="fas fa-calendar-alt text-primary me-2"></i>
+                                <strong>Dipublikasikan:</strong> {{ news.created_at|date:"d F Y, H:i" }}
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="mb-1">
+                                <i class="fas fa-clock text-primary me-2"></i>
+                                <strong>Terakhir diupdate:</strong> {{ news.updated_at|date:"d F Y, H:i" }}
+                            </p>
+                            <p class="mb-1">
+                                <i class="fas fa-eye text-primary me-2"></i>
+                                <strong>Status:</strong> 
+                                {% if news.is_published %}
+                                    <span class="badge bg-success">Published</span>
+                                {% else %}
+                                    <span class="badge bg-warning">Draft</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Image -->
+                {% if news.image_url %}
+                <div class="text-center p-3">
+                    <img src="{{ news.image_url }}" 
+                         class="img-fluid rounded" 
+                         alt="{{ news.title }}"
+                         style="max-height: 500px; object-fit: cover;">
+                    <p class="text-muted mt-2 small">Gambar ilustrasi berita</p>
+                </div>
+                {% else %}
+                <div class="text-center p-5 bg-light">
+                    <i class="fas fa-newspaper fa-5x text-secondary mb-3"></i>
+                    <p class="text-muted">Tidak ada gambar untuk berita ini</p>
+                </div>
+                {% endif %}
+
+                <!-- News Content -->
+                <div class="card-body">
+                    <div class="news-content fs-5">
+                        {{ news.content|linebreaks }}
+                    </div>
+                </div>
+
+                <!-- News Footer -->
+                <div class="card-footer bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="text-muted">
+                                <i class="fas fa-tag me-1"></i>
+                                Kategori: <span class="badge bg-secondary">Informasi Sekolah</span>
+                            </span>
+                        </div>
+                        <div>
+                            <a href="{% url 'news' %}" class="btn btn-outline-primary">
+                                <i class="fas fa-list me-1"></i> Semua Berita
+                            </a>
+                            <a href="{% url 'index' %}" class="btn btn-primary ms-2">
+                                <i class="fas fa-home me-1"></i> Beranda
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Related News (Optional) -->
+            <div class="mt-5">
+                <h3 class="h4 mb-3 border-bottom pb-2">
+                    <i class="fas fa-newspaper text-primary me-2"></i>Berita Lainnya
+                </h3>
+                <div class="row">
+                    {% for related_news in news_list|slice:":3" %}
+                    {% if related_news.id != news.id %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ related_news.title|truncatechars:50 }}</h5>
+                                <p class="card-text small">{{ related_news.content|truncatechars:80 }}</p>
+                                <a href="{% url 'news_detail' related_news.id %}" class="btn btn-sm btn-outline-primary">Baca Selengkapnya</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% empty %}
+                    <div class="col-12">
+                        <div class="alert alert-info">Tidak ada berita lainnya</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .news-content {
+        line-height: 1.8;
+        text-align: justify;
+    }
+    
+    .news-content p {
+        margin-bottom: 1.5rem;
+    }
+    
+    .news-content img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin: 1rem 0;
+    }
+</style>
+{% endblock %}

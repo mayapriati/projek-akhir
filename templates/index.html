@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+
+{% block title %}Prodi Informatika Kreatif - UMS{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1 class="hero-title">PROGRAM STUDI INFORMATIKA KREATIF</h1>
+                <h2 class="h3 mb-4">Fakultas Ilmu Komputer - Universitas Muhammadiyah Surakarta</h2>
+                <p class="lead mb-4">Menyiapkan Profesional Digital yang Kreatif, Inovatif, dan Islami</p>
+                <div class="mt-5">
+                    <a href="{% url 'about' %}" class="btn btn-light btn-lg me-3">
+                        <i class="fas fa-graduation-cap me-2"></i> Profil Prodi
+                    </a>
+                    <a href="{% url 'news' %}" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-newspaper me-2"></i> Berita Terkini
+                    </a>
+                </div>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div class="p-4 bg-white rounded-circle d-inline-block shadow">
+                    <i class="fas fa-laptop-code" style="font-size: 150px; color: var(--ums-green);"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-12 text-center">
+                <h2 class="section-title">KEUNGGULAN PROGRAM STUDI</h2>
+                <p class="lead">Mengintegrasikan Teknologi Informasi dengan Kreativitas Digital dan Nilai Islami</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-4">
+                            <i class="fas fa-code fa-4x" style="color: var(--ums-green);"></i>
+                        </div>
+                        <h4 class="card-title">Pemrograman & Pengembangan</h4>
+                        <p class="card-text">
+                            Pengembangan aplikasi web, mobile, dan game dengan teknologi terkini 
+                            dan framework modern.
+                        </p>
+                        <div class="mt-3">
+                            <span class="badge bg-primary me-1 mb-1">Web Development</span>
+                            <span class="badge bg-primary me-1 mb-1">Mobile Apps</span>
+                            <span class="badge bg-primary mb-1">Game Development</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-4">
+                            <i class="fas fa-paint-brush fa-4x" style="color: var(--ums-green);"></i>
+                        </div>
+                        <h4 class="card-title">Desain Digital Kreatif</h4>
+                        <p class="card-text">
+                            Desain UI/UX, grafis, animasi, multimedia dan konten kreatif 
+                            untuk produk digital.
+                        </p>
+                        <div class="mt-3">
+                            <span class="badge bg-primary me-1 mb-1">UI/UX Design</span>
+                            <span class="badge bg-primary me-1 mb-1">Animasi 3D</span>
+                            <span class="badge bg-primary mb-1">Multimedia</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100">
+                    <div class="card-body text-center p-4">
+                        <div class="mb-4">
+                            <i class="fas fa-brain fa-4x" style="color: var(--ums-green);"></i>
+                        </div>
+                        <h4 class="card-title">Kecerdasan Buatan & Data</h4>
+                        <p class="card-text">
+                            Pengembangan AI, machine learning, data science, dan IoT 
+                            untuk solusi digital masa depan.
+                        </p>
+                        <div class="mt-3">
+                            <span class="badge bg-primary me-1 mb-1">AI/ML</span>
+                            <span class="badge bg-primary me-1 mb-1">Data Science</span>
+                            <span class="badge bg-primary mb-1">Internet of Things</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Latest News Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <h2 class="section-title">Berita & Pengumuman Terkini</h2>
+                <p class="text-muted">Informasi terbaru dari Prodi Informatika Kreatif UMS</p>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            {% for news_item in news_list %}
+            <div class="col-md-4">
+                <div class="card h-100">
+                    {% if news_item.image_url %}
+                    <img src="{{ news_item.image_url }}" class="card-img-top news-image" alt="{{ news_item.title }}">
+                    {% else %}
+                    <div class="card-img-top news-image d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, var(--ums-green), #2e7d32);">
+                        <i class="fas fa-newspaper fa-3x text-white"></i>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ news_item.title|truncatechars:60 }}</h5>
+                        <p class="card-text">{{ news_item.content|truncatechars:120 }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <small class="text-muted">
+                                <i class="fas fa-calendar-alt me-1"></i>
+                                {{ news_item.created_at|date:"d M Y" }}
+                            </small>
+                            <a href="{% url 'news_detail' news_item.id %}" class="btn btn-sm btn-primary">
+                                Baca <i class="fas fa-arrow-right ms-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info text-center">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Belum ada berita tersedia. Silakan tambah berita melalui admin panel.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if news_list %}
+        <div class="text-center mt-5">
+            <a href="{% url 'news' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-list me-2"></i> Lihat Semua Berita
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+
+<!-- Ketua Prodi Message Section -->
+<section class="py-5">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4 text-center mb-4 mb-lg-0">
+                <div class="p-4 border rounded-circle d-inline-block" style="border-color: var(--ums-green) !important;">
+                    <i class="fas fa-user-graduate fa-5x" style="color: var(--ums-green);"></i>
+                </div>
+                <h4 class="mt-3">Sambutan Ketua Prodi</h4>
+                <p class="text-muted">Dr. Ahmad Fauzi, M.Kom.</p>
+                <p class="small">Ketua Program Studi Informatika Kreatif</p>
+            </div>
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p class="fs-5">
+                                <i class="fas fa-quote-left me-2" style="color: var(--ums-green);"></i>
+                                <strong>Bismillahirrahmanirrahim.</strong><br><br>
+                                Assalamu'alaikum Warahmatullahi Wabarakatuh.<br><br>
+                                Selamat datang di Program Studi Informatika Kreatif, Fakultas Ilmu Komputer, 
+                                Universitas Muhammadiyah Surakarta. Kami berkomitmen untuk menghasilkan 
+                                lulusan yang tidak hanya kompeten dalam bidang teknologi informasi, 
+                                tetapi juga memiliki kreativitas tinggi dan berlandaskan nilai-nilai islami.<br><br>
+                                Mari bersama-sama membangun generasi digital yang kreatif, inovatif, 
+                                dan berkontribusi untuk kemajuan umat.
+                                <i class="fas fa-quote-right ms-2" style="color: var(--ums-green);"></i>
+                            </p>
+                            <footer class="blockquote-footer mt-3">
+                                Wassalamu'alaikum Warahmatullahi Wabarakatuh
+                            </footer>
+                        </blockquote>
+                        <div class="mt-4">
+                            <a href="{% url 'about' %}" class="btn btn-primary">
+                                <i class="fas fa-book-open me-2"></i> Selengkapnya Tentang Prodi
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Quick Links -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3 mb-4">
+                <div class="p-3">
+                    <i class="fas fa-book fa-3x mb-3" style="color: var(--ums-green);"></i>
+                    <h5>Kurikulum</h5>
+                    <p>Kurikulum berbasis kompetensi dan industri</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="p-3">
+                    <i class="fas fa-users fa-3x mb-3" style="color: var(--ums-green);"></i>
+                    <h5>Dosen</h5>
+                    <p>Dosen berkualifikasi S2/S3 dan berpengalaman</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="p-3">
+                    <i class="fas fa-building fa-3x mb-3" style="color: var(--ums-green);"></i>
+                    <h5>Fasilitas</h5>
+                    <p>Laboratorium lengkap dan teknologi terkini</p>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="p-3">
+                    <i class="fas fa-handshake fa-3x mb-3" style="color: var(--ums-green);"></i>
+                    <h5>Kerjasama</h5>
+                    <p>Kerjasama dengan industri dan perusahaan IT</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
